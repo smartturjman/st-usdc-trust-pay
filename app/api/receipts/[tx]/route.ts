@@ -1,31 +1,36 @@
-import { NextRequest, NextResponse } from "next/server";
+// No need for NextResponse—use the Web Response type for Next.js 16
+type RouteContext = { params: { tx: string } };
 
-export async function GET(_: NextRequest, { params }: { params: { tx: string } }) {
-  const { tx } = params;
-  const html = `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="utf-8" />
-      <title>Verified Transaction Certificate</title>
-      <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        .title { font-weight: 700; font-size: 20px; }
-        .box { border: 1px solid #ccc; padding: 20px; border-radius: 12px; margin-top: 20px; }
-      </style>
-    </head>
-    <body>
-      <div class="title">Smart Turjman — Verified Transaction Certificate</div>
-      <p><b>Tx Hash:</b> ${tx}</p>
-      <div class="box">
-        <p>Service: Legal Translation – MOFA</p>
-        <p>Amount: 75.00 USDC</p>
-        <p>Status: Verified</p>
-        <p>Network: Testnet (Demo)</p>
-      </div>
-      <p>Verify on-chain: Use a block explorer with the hash above (demo mode).</p>
-    </body>
-  </html>`;
-  
-  return new NextResponse(html, { headers: { "Content-Type": "text/html" } });
+export async function GET(
+  _req: Request,
+  context: RouteContext
+): Promise<Response> {
+  const { tx } = context.params;
+
+  const html = `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Verified Transaction Certificate</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:40px;}
+    .title{font-weight:700;font-size:20px;}
+    .box{border:1px solid #ccc;padding:20px;border-radius:12px;margin-top:16px;}
+    code{word-break:break-all}
+  </style>
+</head>
+<body>
+  <div class="title">Smart Turjman — Verified Transaction Certificate</div>
+  <p><b>Tx Hash:</b> <code>${tx}</code></p>
+  <div class="box">
+    <p>Service: Legal Translation – MOFA</p>
+    <p>Amount: 75.00 USDC</p>
+    <p>Status: Verified</p>
+    <p>Network: Testnet (Demo)</p>
+  </div>
+  <p>Verify on-chain with the hash above (demo mode).</p>
+</body>
+</html>`;
+
+  return new Response(html, { headers: { "Content-Type": "text/html" } });
 }
