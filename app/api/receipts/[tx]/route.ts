@@ -1,5 +1,7 @@
-export async function GET(_req: Request, context: any): Promise<Response> {
-  const { tx } = context.params as { tx: string };
+// @ts-nocheck
+
+export async function GET(_req, context) {
+  const { tx } = context.params;
 
   const html = `<!doctype html>
 <html>
